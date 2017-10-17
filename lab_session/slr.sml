@@ -211,26 +211,41 @@ val llTable = addTable(gr1,terminal, llTable,terminal);
 (* SLR(1) table calculation *)
 
 structure Setslr = RedBlackSetFn(TableKey);
-
-val slr = Setslr.empty;
-val rule0 = Transition("S", [T"." ,NT "A"])
-val gr1 = rule0::gr1;
-
+val slr0 = Setslr.empty; 
+(* S->start s->end of symbol *)
+val slr0 = Setslr.add(slr0, ["S",".","A"]);
 structure Mapslr = RedBlackMapFn(IntKey);
-slrMap = Mapslr.empty;
+val slrMap = Mapslr.empty;
+val key = 1;
 
-fun makeSet(slrMap,grm, 
-fun closure();
+
+(*fun makeSet(slrMap, key) = if(makeSet(closure(Transition(x, T"."::NT y::ys)::xs,key)
 fun goto();
 fun shift();
-fun reduce();
+fun reduce();*)
+fun closure_(slr_:Setslr.set , x:Setslr.item list, y:Rule list) = slr_ 
+  (*| closure(slr, [p::nil], _) = slr
+  | closure(slr, [p::q,y], []) = closure(slr,[y], gr1)
+  | closure(slr, [p,qs], Transition(x,y)::xs) = closure(slr,[qs],gr1)
+  | closure(slr, [p::q::ps], Transition(x,y)::xs) = if(p <> ".") then closure(slr, [q::ps], Transition(x,y)::xs)
+																									else if(x = q) then closure(Setslr.add(slr, x::"."::stringof(y)),[p::q::ps],xs)
+																									else closure(slr,[p::q::ps],xs)
+  | closure(slr, [p::q::ps,qs], Transition(x,y)::xs) = if(p <> ".") then closure(slr, [q::ps,qs], Transition(x,y)::xs)
+																									else if(x = q) then closure(Setslr.add(slr, x::"."::stringof(y)),[p::q::ps,qs],xs)
+																									else closure(slr,[p::q::ps,qs],xs);*)
+	
 
+
+Setslr.listItems(slr0);
+val item_ = Setslr.listItems(slr0);
+val slrMap = Mapslr.insert(slrMap, key, closure_(slr0, item_, gr1));
 
 
 MapNlbl.listItemsi(nlbl);	
 Mapfst.listItemsi(first);	
 Mapflw.listItemsi(follow);
 Mapll.listItemsi(llTable);
+Mapslr.listItemsi(slrMap);
 
 
  
